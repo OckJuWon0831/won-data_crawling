@@ -1,3 +1,4 @@
+import json
 from sqlalchemy import create_engine
 from datetime import datetime
 import pymysql
@@ -71,13 +72,20 @@ all_data_df_bind = all_data_df_bind.replace({np.nan: None})
 
 driver.quit()
 
-con = pymysql.connect(
-    user='root',
-    password='Snowcountry12~',
-    host='127.0.0.1',
-    db='stock_db',
-    charset='utf8'
-)
+with open('./env/config.json') as f:
+    config = json.load(f)
+
+DB_USER = config['DB_USER']
+DB_PASSWORD = config['DB_PASSWORD']
+DB_HOST = config['DB_HOST']
+DB_NAME = config['DB_NAME']
+DB_CHARSET = config['DB_CHARSET']
+
+con = pymysql.connect(user=DB_USER,
+                      passwd=DB_PASSWORD,
+                      host=DB_HOST,
+                      db=DB_NAME,
+                      charset=DB_CHARSET)
 
 mycursor = con.cursor()
 query = """
